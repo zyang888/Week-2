@@ -7,8 +7,7 @@ describe('Calendars DAO', () => {
   
   describe('getById', () => {
     it('should return null with no calendar created', async () => {
-      const id = testUtils.generateId();
-      const calendar = await CalendarDao.getById(id);
+      const calendar = await CalendarDao.getById('id');
       expect(calendar).toBeNull();
     });
   });

@@ -7,6 +7,14 @@ module.exports.create = async (name) => {
 };
 
 module.exports.getById = async (id) => {
-  const calendar = await Calendars.findOne({ _id: id }).lean();
-  return calendar;
+  try {
+    const calendar = await Calendars.findOne({ _id: id }).lean();
+    return calendar;
+  } catch (e) {
+    if (e.message.match(/Cast to ObjectId/)) {
+      return null;
+    } else {
+      throw e;
+    }
+  }
 };
