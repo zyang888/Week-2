@@ -1,0 +1,27 @@
+{
+  "name": "week-2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "tdd": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UW-PCE-JSCRIPT-400-Summer-2020/Week-2.git"
+  },
+  "author": "Joel Detweiler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/UW-PCE-JSCRIPT-400-Summer-2020/Week-2/issues"
+  },
+  "homepage": "https://github.com/UW-PCE-JSCRIPT-400-Summer-2020/Week-2#readme",
+  "dependencies": {
+    "mongoose": "^5.9.21"
+  },
+  "devDependencies": {
+    "@shelf/jest-mongodb": "^1.1.5",
+    "jest": "^26.1.0"
+  }
+}
