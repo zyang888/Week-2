@@ -19,9 +19,10 @@ The assignment this week is designed to introduce you to MongoDB and its basic f
 2. Ensure you have git and github set up on your computer. If you do not, please follow this guide: https://help.github.com/en/github/getting-started-with-github.
 3. Fork this repository and clone it locally. 
 4. In your terminal, from inside this project directory, run `npm install` to install the project dependencies.
-5. Run `npm start` to start your local server. You should see a logged statement telling you `Server is listening on http://localhost:5000`.
-6. Download [Postman](https://www.postman.com/) or an API client of your choice. Browse the various endpoints contained in this project. Practice calling all of them and getting 200 HTTP responses.
-7. Run the unit tests of this project: `npm test`. Your test output should end in something like this:
+5. Download and install [MongoDB](https://www.mongodb.com/try/download/community). This project uses the default MongoDB configuration. If you run Mongo in a non-standard way you may need to update the configuration in `index.js` to match. If you have issues, reference the [Mongoose Connection Guide](https://mongoosejs.com/docs/connections.html).
+6. Run `npm start` to start your local server. You should see a logged statement telling you `Server is listening on http://localhost:5000`.
+7. Download [Postman](https://www.postman.com/) or an API client of your choice. Browse the various endpoints contained in this project. Practice calling all of them and getting 200 HTTP responses.
+8. Run the unit tests of this project: `npm test`. Your test output should end in something like this:
 ```
 Test Suites: 1 failed, 1 total
 Tests:       3 failed, 4 passed, 7 total
