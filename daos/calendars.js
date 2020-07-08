@@ -11,10 +11,6 @@ module.exports.getById = async (id) => {
     const calendar = await Calendars.findOne({ _id: id }).lean();
     return calendar;
   } catch (e) {
-    if (e.message.match(/Cast to ObjectId/)) {
-      return null;
-    } else {
-      throw e;
-    }
+    return null;
   }
 };
