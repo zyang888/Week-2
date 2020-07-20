@@ -122,82 +122,85 @@ describe("/calendars", () => {
 });
 
 // ****************************************
-describe("/calendars/events", () => {
+describe("/events", () => {
   beforeAll(testUtils.connectDB);
   afterAll(testUtils.stopDB);
 
   afterEach(testUtils.clearDB);
 
-  describe("POST /:id/events", () => {
-    it("should return a 400 without a provided name", async () => {
-      const res = await request(server).post("/calendars/id1/events").send({});
-      expect(res.statusCode).toEqual(400);
-    });
-  });
-
-  describe("GET /:id/events/:id", () => {
-    it("should return 404 if no matching id", async () => {
-      const res = await request(server).get("/calendars/id1/events/id1");
-      expect(res.statusCode).toEqual(404);
-    });
-  });
-
-  describe("GET /:id/events/:id", () => {
-    let event1;
+  describe("GET calendar/:id/events/:id", () => {
+    let calendar1, event1;
     beforeEach(async () => {
+      calendar1 = (
+        await request(server).post("/calendars").send({ name: "calendar1" })
+      ).body;
       event1 = (
         await request(server)
-          .post("/calendars")
+          .post(`/calendars/${calendar1.id}/events`)
           .send({ name: "event1", date: Date(1995, 11, 17) })
       ).body;
     });
     it("should return event with provided id", async () => {
       const res = await request(server).get(
-        `/calendars/${calendar1._id}/events/${calendar1._id}`
+        `/calendars/${calendar1._id}/events/${event1._id}`
       );
       expect(res.statusCode).toEqual(200);
       const storedCalendar = res.body;
       expect(storedCalendar).toMatchObject({
-        name: "calendar1",
+        name: "event1",
         date: Date(1995, 11, 17),
-        _id: calendar1._id,
+        _id: event1._id,
       });
+    });
+    it("should not return event with invalid calendar id", async () => {
+      const res = await request(server).get(
+        `/calendars/id1/events/${event1._id}`
+      );
+      expect(res.statusCode).toEqual(404);
     });
   });
 
   describe("GET /:id/events", () => {
-    let event1, event2;
+    let calendar1, event1, event2;
     beforeEach(async () => {
+      calendar1 = (
+        await request(server).post("/calendars").send({ name: "calendar1" })
+      ).body;
       event1 = (
         await request(server)
-          .post("/calendars")
+          .post(`/calendars/${calendar1.id}/events`)
           .send({ name: "event1", date: Date(1995, 5, 19) })
       ).body;
       event2 = (
         await request(server)
-          .post("/calendars")
+          .post(`/calendars/${calendar1.id}/events`)
           .send({ name: "event2", date: Date(2020, 5, 19) })
       ).body;
     });
 
     it("should return an array for all the events for the specified calendar", async () => {
-      const res = await request(server).get("/calendars/" + calendar1._id);
+      const res = await request(server).get(`/calendars/${calendar1._id}/events`);
       expect(res.statusCode).toEqual(200);
       const storedCalendar = res.body;
       expect(storedCalendar).toMatchObject([event1, event2]);
     });
   });
 
-  describe("PUT /:id after POST /", () => {
-    let calendar1;
+  describe("PUT /calendars/:id/events/:id after POST /", () => {
+    let calendar1, event1;
 
     beforeEach(async () => {
       calendar1 = (
         await request(server).post("/calendars").send({ name: "calendar1" })
       ).body;
+      event1 = (
+        await request(server)
+          .post(`/calendars/${calendar1.id}/events`)
+          .send({ name: "event1", date: Date(1995, 5, 19) })
+      ).body;
     });
 
-    it("should store and return calendar1 with new name", async () => {
+    it("should updates event with provided id from specified calendar to have data from request body", async () => {
       const res = await request(server)
         .put("/calendars/" + calendar1._id)
         .send({ name: "new name" });
@@ -213,16 +216,21 @@ describe("/calendars/events", () => {
     });
   });
 
-  describe("DELETE /:id after POST /", () => {
-    let calendar1;
+  describe("DELETE /calendars/:id/events/:id after POST /", () => {
+    let calendar1, event1;
 
     beforeEach(async () => {
       calendar1 = (
         await request(server).post("/calendars").send({ name: "calendar1" })
       ).body;
+      event1 = (
+        await request(server)
+          .post(`/calendars/${calendar1.id}/events`)
+          .send({ name: "event1", date: Date(1995, 5, 19) })
+      ).body;
     });
 
-    it("should delete and not return calendar1 on next GET", async () => {
+    it("should delete and not return event1 on next GET", async () => {
       const res = await request(server).delete("/calendars/" + calendar1._id);
       expect(res.statusCode).toEqual(200);
       const storedCalendarResponse = await request(server).get(

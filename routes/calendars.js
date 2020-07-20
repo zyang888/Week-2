@@ -50,14 +50,14 @@ router.post("/:id/events", async (req, res, next) => {
   if (!name) {
     res.status(400).send('body parameter "name" is required"');
   } else {
-    const calendar = await CalendarDAO.create(name);
+    const calendar = await CalendarDAO.createEvent(name);
     res.json(calendar);
   }
 });
 
 // GET /calendars/:id/events/:id - returns event with provided id from specified calendar
 router.get("/:id/events/:id", async (req, res, next) => {
-  const calendar = await CalendarDAO.getById(req.params.id);
+  const calendar = await CalendarDAO.getEventById(req.params.id);
   if (calendar) {
     res.json(calendar);
   } else {
@@ -68,7 +68,7 @@ router.get("/:id/events/:id", async (req, res, next) => {
 // GET /calendars/:id/events - get an array for all the events for the specified calendar
 // Optional query parameters from and to to specify start and end dates, inclusively, that the returned events should be contained within
 router.get("/:id/events", async (req, res, next) => {
-  const calendar = await CalendarDAO.getAll();
+  const calendar = await CalendarDAO.getAllEvents();
   if (calendar) {
     res.json(calendar);
   } else {
@@ -77,15 +77,15 @@ router.get("/:id/events", async (req, res, next) => {
 });
 
 // PUT /calendars/:id/events/:id - updates event with provided id from specified calendar to have data from request body
-router.put("/:id", async (req, res, next) => {
+router.put("/:id/event/:id", async (req, res, next) => {
   const { name } = req.body;
   await
-  CalendarDAO.put(req.params.id, name);
+  CalendarDAO.putEvent(req.params.id, name);
   res.sendStatus(200);
 });
 // DELETE /calendars/:id/events/:id - deletes event with provided id from specified calendar
-router.delete("/:id", async (req, res, next) => {
-  const calendar = await CalendarDAO.delete(req.params.id);
+router.delete("/:id/events/:id", async (req, res, next) => {
+  const calendar = await CalendarDAO.deleteEvent(req.params.id);
   res.sendStatus(200);
 });
 
