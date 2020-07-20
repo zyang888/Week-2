@@ -184,30 +184,7 @@ describe("/calendars/events", () => {
       const res = await request(server).get("/calendars/" + calendar1._id);
       expect(res.statusCode).toEqual(200);
       const storedCalendar = res.body;
-      expect(storedCalendar).toMatchObject({
-        name: "calendar1",
-        _id: calendar1._id,
-      });
-    });
-  });
-
-  describe("GET / after multiple POST /", () => {
-    let calendar1, calendar2;
-
-    beforeEach(async () => {
-      calendar1 = (
-        await request(server).post("/calendars").send({ name: "calendar1" })
-      ).body;
-      calendar2 = (
-        await request(server).post("/calendars").send({ name: "calendar2" })
-      ).body;
-    });
-
-    it("should return all calendars", async () => {
-      const res = await request(server).get("/calendars/");
-      expect(res.statusCode).toEqual(200);
-      const storedCalendars = res.body;
-      expect(storedCalendars).toMatchObject([calendar1, calendar2]);
+      expect(storedCalendar).toMatchObject([event1, event2]);
     });
   });
 
