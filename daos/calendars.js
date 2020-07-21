@@ -39,7 +39,7 @@ module.exports.createEvent = async (id, name, date) => {
     const calendar = await Calendars.findOne({ _id: id });
     calendar.events.push({ name: name, date: date });
     calendar.save();
-    return calendar.events[0];
+    return calendar.events[calendar.events.length-1];
   } catch (e) {
     return null;
   }
