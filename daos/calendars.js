@@ -34,23 +34,30 @@ module.exports.delete = async (id) => {
 
 // *************************
 
-module.exports.createEvent = async (name, date) => {
-  return await Calendars.create({ name: name, date: date });
-};
-
-module.exports.getEventById = async (id) => {
+module.exports.createEvent = async (id, name, date) => {
   try {
-    const event0 = await Calendars.findOne({ _id: id }).lean();
-    return event0;
+    const calendar = await Calendars.findOne({ _id: id });
+    calendar.events.push({ name: name, date: date });
+    calendar.save();
+    return calendar.events[0];
   } catch (e) {
     return null;
   }
 };
 
-module.exports.getAllEvents = async () => {
+module.exports.getEventById = async (calendar_id, event_id) => {
   try {
-    const event0 = await Calendars.find().lean();
-    return event0;
+    const calendar = await Calendars.findOne({ _id: calendar_id }).lean();
+    return await calendar.events.id(event_id).lean();
+  } catch (e) {
+    return null;
+  }
+};
+
+module.exports.getAllEvents = async (id) => {
+  try {
+    const calendar = await Calendars.findOne({ _id: id }).lean();
+    return await calendar.events.lean();
   } catch (e) {
     return null;
   }
