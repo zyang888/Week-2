@@ -63,16 +63,21 @@ module.exports.getAllEvents = async (id) => {
   }
 };
 
-module.exports.putEvent = async (id, name) => {
-  const calendar = await Calendars.findOne({ _id: calendar_id });
-  const event0 = await Calendars.findOne({ _id: event_id });
-  await event0.updateOne({ _id: id }, { name: name });
-  return;
+module.exports.putEvent = async (id, name, date) => {
+  try {
+    const calendar = await Calendars.findOne({ _id: calendar_id }).lean();
+    const event0 = calendar.events.filter((event0) => event0._id.equals(event_id))[0];
+    event0.name = name;
+    event0.date = date;
+    calendar.save();
+  } catch (e) {
+    return null;
+  }
 };
 
 module.exports.deleteEvent = async (calendar_id, event_id) => {
   const calendar = await Calendars.findOne({ _id: calendar_id });
-  await calendar.events.id(event_id).remove();
+  calendar.events = calendar.events.filter((event0) => !event0._id.equals (event_id));
   calendar.save();
   return;
 };
