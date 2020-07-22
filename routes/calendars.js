@@ -81,12 +81,15 @@ router.get("/:id/events", async (req, res, next) => {
 // PUT /calendars/:id/events/:id - updates event with provided id from specified calendar to have data from request body
 router.put("/:calendar_id/event/:event_id", async (req, res, next) => {
   const { name } = req.body;
-  await CalendarDAO.putEvent(req.params.id, name);
+  await CalendarDAO.putEvent(req.params.calendar_id, req.params.event_id, name);
   res.sendStatus(200);
 });
 // DELETE /calendars/:id/events/:id - deletes event with provided id from specified calendar
-router.delete("/:id/events/:id", async (req, res, next) => {
-  const calendar = await CalendarDAO.deleteEvent(req.params.id);
+router.delete("/:calendar_id/events/:event_id", async (req, res, next) => {
+  const calendar = await CalendarDAO.deleteEvent(
+    req.params.calendar_id,
+    req.params.event_id
+  );
   res.sendStatus(200);
 });
 
